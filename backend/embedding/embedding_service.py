@@ -6,3 +6,9 @@ model = SentenceTransformer(
 
 def get_embedding(text):
     return model.encode(text).tolist()
+
+from embeddings.embedding_service import get_embedding
+
+vec = get_embedding("hello world")
+
+print(len(vec))
