@@ -265,22 +265,23 @@ Observability
 * [ ] Multi-Source Ingestion
 * [ ] Feedback Collection
 
-## Phase 3 - Production Readiness
 
-* [ ] Kubernetes Deployment
-* [ ] Horizontal Scaling
-* [ ] Monitoring
-* [ ] CI/CD Pipelines
-* [ ] Backup & Recovery
-
-## Phase 4 - Advanced Intelligence
-
-* [ ] Re-ranking Models
-* [ ] Knowledge Versioning
-* [ ] Agent Workflows
-* [ ] Jira/Confluence Integrations
-* [ ] Automated Knowledge Updates
 
 ---
 
+# Current Status
 
+Project Stage: Architecture & Design
+
+Progress: ~15%
+
+Current Focus:
+
+* Finalize repository structure
+* Build MVP backend
+* Implement ingestion pipeline
+* Integrate vector database
+* Enable semantic retrieval
+
+Next Milestone:
+Upload a PDF and ask questions against it using RAG.
