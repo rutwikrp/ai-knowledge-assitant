@@ -18,3 +18,8 @@ def chunk_text(
         start += chunk_size - overlap
 
     return chunks
+
+
+chunks = chunk_text(text)
+
+print(len(chunks))
