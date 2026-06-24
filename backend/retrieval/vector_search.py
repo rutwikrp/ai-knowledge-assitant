@@ -1,13 +1,12 @@
 from sqlalchemy import text
+
 from db.sessions import engine
 from embedding.embedding_service import get_embedding
 
 
-def search(query: str, top_k: int = 5):
+def search(query, top_k=5):
 
     query_embedding = get_embedding(query)
-
-    vector = str(query_embedding)
 
     with engine.connect() as conn:
 
@@ -16,13 +15,19 @@ def search(query: str, top_k: int = 5):
                 SELECT
                     id,
                     content,
-                    embedding <=> CAST(:embedding AS vector) AS distance
+                    document_name,
+                    page_number,
+                    embedding <=> CAST(:embedding AS vector)
+                    AS distance
+
                 FROM chunks
+
                 ORDER BY distance
+
                 LIMIT :top_k
             """),
             {
-                "embedding": vector,
+                "embedding": str(query_embedding),
                 "top_k": top_k
             }
         )
