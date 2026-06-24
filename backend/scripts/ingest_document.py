@@ -3,8 +3,10 @@ import os
 from sqlalchemy import text
 
 from db.sessions import engine
+
 from ingestion.pdf_loader import extract_pdf_text
 from ingestion.chunker import chunk_text
+
 from embedding.embedding_service import get_embedding
 
 
@@ -12,9 +14,7 @@ def ingest_pdf(pdf_path):
 
     filename = os.path.basename(pdf_path)
 
-    text_content = extract_pdf_text(pdf_path)
-
-    chunks = chunk_text(text_content)
+    pages = extract_pdf_text(pdf_path)
 
     with engine.begin() as conn:
 
@@ -27,7 +27,6 @@ def ingest_pdf(pdf_path):
                     team,
                     version
                 )
-
                 VALUES
                 (
                     :title,
@@ -35,7 +34,6 @@ def ingest_pdf(pdf_path):
                     'devops',
                     '1.0'
                 )
-
                 RETURNING id
             """),
             {
@@ -43,38 +41,58 @@ def ingest_pdf(pdf_path):
             }
         ).scalar()
 
-        for index, chunk in enumerate(chunks):
+        total_chunks = 0
 
-            embedding = get_embedding(chunk)
+        for page in pages:
 
-            conn.execute(
-                text("""
-                    INSERT INTO chunks
-                    (
-                        document_id,
-                        chunk_index,
-                        content,
-                        embedding
-                    )
+            page_number = page["page_number"]
 
-                    VALUES
-                    (
-                        :document_id,
-                        :chunk_index,
-                        :content,
-                        :embedding
-                    )
-                """),
-                {
-                    "document_id": document_id,
-                    "chunk_index": index,
-                    "content": chunk,
-                    "embedding": str(embedding)
-                }
-            )
+            page_text = page["text"]
+
+            if len(page_text.strip()) < 100:
+                continue
+
+            chunks = chunk_text(page_text)
+
+            for chunk_index, chunk in enumerate(chunks):
+
+                embedding = get_embedding(chunk)
+
+                conn.execute(
+                    text("""
+                        INSERT INTO chunks
+                        (
+                            document_id,
+                            chunk_index,
+                            content,
+                            embedding,
+                            document_name,
+                            page_number
+                        )
+                        VALUES
+                        (
+                            :document_id,
+                            :chunk_index,
+                            :content,
+                            :embedding,
+                            :document_name,
+                            :page_number
+                        )
+                    """),
+                    {
+                        "document_id": document_id,
+                        "chunk_index": chunk_index,
+                        "content": chunk,
+                        "embedding": str(embedding),
+                        "document_name": filename,
+                        "page_number": page_number
+                    }
+                )
+
+                total_chunks += 1
 
     print(
-        f"Stored {len(chunks)} chunks from {filename}"
+        f"Stored {total_chunks} chunks from {filename}"
     )
 
 
