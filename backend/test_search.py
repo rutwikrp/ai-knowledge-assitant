@@ -1,8 +1,6 @@
 from retrieval.vector_search import search
 
-results = search(
-    "How do I create infrastructure as code?"
-)
+results = search("How do I provision infrastructure?")
 
 for row in results:
 

@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from sessions import engine
+from session import engine
 
 with engine.connect() as conn:
     result = conn.execute(

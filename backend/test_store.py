@@ -1,7 +1,7 @@
 from sqlalchemy import text
 
-from db.sessions import engine
-from embedding.embedding_service import get_embedding
+from backend.db.session import engine
+from embeddings.embedding_service import get_embedding
 
 sample_text = """
 Kubernetes deployments are managed

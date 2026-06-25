@@ -2,12 +2,12 @@ import os
 
 from sqlalchemy import text
 
-from db.sessions import engine
+from db.session import engine
 
 from ingestion.pdf_loader import extract_pdf_text
 from ingestion.chunker import chunk_text
 
-from embedding.embedding_service import get_embedding
+from embeddings.embedding_service import get_embedding
 
 
 def ingest_pdf(pdf_path):
@@ -53,7 +53,11 @@ def ingest_pdf(pdf_path):
                 continue
 
             chunks = chunk_text(page_text)
-
+            print(
+                f"Page {page_number}: "
+                f"{len(page_text)} chars -> "
+                f"{len(chunks)} chunks"
+            )
             for chunk_index, chunk in enumerate(chunks):
 
                 embedding = get_embedding(chunk)
@@ -92,10 +96,10 @@ def ingest_pdf(pdf_path):
                 total_chunks += 1
 
     print(
-        f"Stored {total_chunks} chunks from {filename}"
+        f"Stored {total_chunks} chunks from {filename}"    
     )
 
 
 if __name__ == "__main__":
 
-    ingest_pdf("TheTerraformBook_sample.pdf")
+    ingest_pdf("Kubernetes-eBook.pdf")
