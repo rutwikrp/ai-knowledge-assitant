@@ -1,12 +1,12 @@
 from retrieval.pipeline import retrieve
 from llm.prompt_builder import PromptBuilder
-from llm.providers.ollama import OllamaProvider
+from llm.provider_factory import get_provider
 
 
 class ResponseGenerator:
 
     def __init__(self):
-        self.provider = OllamaProvider()
+        self.provider = get_provider()
 
     def generate(self, query):
 
