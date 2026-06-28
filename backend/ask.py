@@ -1,28 +1,44 @@
 from llm.response_generator import ResponseGenerator
 
-generator = ResponseGenerator()
 
-print("\nEnterprise AI Knowledge Assistant")
-print("-" * 50)
+def main():
 
-while True:
+    generator = ResponseGenerator()
 
-    query = input("\nAsk a question (type 'exit' to quit): ")
+    print("=" * 60)
+    print(" Enterprise AI Knowledge Assistant")
+    print("=" * 60)
 
-    if query.lower() == "exit":
-        break
+    while True:
 
-    result = generator.generate(query)
+        query = input("\nAsk a question ('exit' to quit): ").strip()
 
-    print("\nAnswer\n")
+        if query.lower() == "exit":
+            print("\nGoodbye!")
+            break
 
-    print(result["answer"])
+        if not query:
+            continue
 
-    print("\nSources")
+        print("\nSearching knowledge base...\n")
 
-    for chunk, score in result["sources"]:
+        result = generator.generate(query)
 
-        print(
-            f"- {chunk.document_name}"
-            f" (Page {chunk.page_number})"
-        )
+        print("=" * 60)
+        print("Answer")
+        print("=" * 60)
+        print(result["answer"])
+
+        print("\nSources")
+        print("-" * 60)
+
+        for chunk, score in result["sources"]:
+
+            print(
+                f"- {chunk.document_name} "
+                f"(Page {chunk.page_number})"
+            )
+
+
+if __name__ == "__main__":
+    main()
