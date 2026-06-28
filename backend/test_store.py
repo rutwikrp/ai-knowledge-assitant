@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from backend.db.session import engine
+from db.session import engine
 from embeddings.embedding_service import get_embedding
 
 sample_text = """

@@ -102,4 +102,4 @@ def ingest_pdf(pdf_path):
 
 if __name__ == "__main__":
 
-    ingest_pdf("Kubernetes-eBook.pdf")
+    ingest_pdf("TheTerraformBook_sample.pdf")
