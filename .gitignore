@@ -1,3 +1,14 @@
-#ignore python env
-venv/
+# Environment
+.env
+**/.env
+
+# Python
 .venv/
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
